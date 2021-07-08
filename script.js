@@ -1,22 +1,45 @@
 function vie(){
-    for(let i=1; i<=nbCol; i++){
-        for(let j=1; j<=nbLign; j++){
-            if(zone[i][j].style.backgroundColor == 'black' && j-1>0)
-            zone[i][j-1].style.backgroundColor = 'black';
-            zone[i][j].style.backgroundColor = 'white'
-
+    for(let i=Math.ceil(-nbCol/2); i<=Math.floor(nbLign/2); i++){
+        for(let j=Math.ceil(-nbLign/2); j<=Math.floor(nbLign/2); j++){
+            
+            console.log("base : " + i + ", " + j)
+            
+            if(zone[i][j].style.backgroundColor == 'white'){
+                compVieEnv = 0;
+                for(let k=i-1; k<=i+1; k++ ){
+                    for(let l=j-1; l<=j+1; l++ ){
+                        
+                        console.log("controle : " + k + ', ' + l + " est de couleur " + zone[k][l].style.backgroundColor)
+                        
+                        if(zone[k][l].style.backgroundColor == 'black'){
+                            compVieEnv++;
+                        }
+                    }
+                }
+            console.log("compteur de vie :" + compVieEnv )
+            if(compVieEnv >=3){
+                zone[i][j].style.backgroundColor = 'black';  
+            }
+            }
         }
     }
+    compTour++
+    console.log("Tour : " + compTour);
     setTimeout(vie, 1000);
 }
 
 let coordX;
 let coordY;
-let zone = [];
+
 let colonne = [];
+let compVieEnv
 let etat;
+let compTour = 0;
 let nbCol = 5;
 let nbLign = 5;
+let zone = [];
+
+
 
 let plateau = document.createElement('div');
 document.body.appendChild(plateau);
@@ -25,12 +48,29 @@ plateau.style.flexDirection = 'row';
 plateau.style.flexWrap = 'wrap';
 plateau.style.justifyContent = 'center';
 
-for(let i=1; i<=nbCol; i++){
-    zone[i] = [];
+for(let i=Math.ceil(-nbCol/2)-1; i<=Math.floor(nbLign/2)+1; i++){
+   zone[i] = [];
+    for(let j=Math.ceil(-nbLign/2-1); j<=Math.floor(nbLign/2)+1; j++){
+        zone[i][j] =  document.createElement('div');
+        zone[i][j].style.border = '1px solid #CECECE';
+        zone[i][j].style.backgroundColor = 'white';
+        zone[i][j].style.height = "150px";
+        zone[i][j].style.width = "150px";
+        zone[i][j].textContent = i + ", " + j;
+        zone[i][j].style.fontSize = "9px";
+    }
+}
+
+for(let i=Math.ceil(-nbCol/2); i<=Math.floor(nbLign/2); i++){
     colonne[i] = document.createElement('div');
     plateau.appendChild(colonne[i]);
+    for(let j=Math.ceil(-nbLign/2); j<=Math.floor(nbLign/2); j++){
+
+    }
     
-    for(let j=1; j<=nbLign; j++){
+
+    
+    for(let j=Math.ceil(-nbLign/2); j<=Math.floor(nbLign/2); j++){
         
         if(i<10){
             coordX = "0" + i;
@@ -44,13 +84,7 @@ for(let i=1; i<=nbCol; i++){
             coordX = j;
         }
         
-        zone[i][j] =  document.createElement('div');
-        zone[i][j].style.border = '1px solid #CECECE';
-        zone[i][j].style.backgroundColor = 'white';
-        zone[i][j].style.height = "150px";
-        zone[i][j].style.width = "150px";
-        zone[i][j].textContent = i + ", " + j;
-        zone[i][j].style.fontSize = "9px";
+        
        
         zone[i][j].addEventListener('click', function(){
             if(zone[i][j].style.backgroundColor == 'white'){
