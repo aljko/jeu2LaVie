@@ -1,33 +1,3 @@
-function vie(){
-    for(let i=Math.ceil(-nbCol/2); i<=Math.floor(nbLign/2); i++){
-        for(let j=Math.ceil(-nbLign/2); j<=Math.floor(nbLign/2); j++){
-            
-            console.log("base : " + i + ", " + j)
-            
-            if(zone[i][j].style.backgroundColor == 'white'){
-                compVieEnv = 0;
-                for(let k=i-1; k<=i+1; k++ ){
-                    for(let l=j-1; l<=j+1; l++ ){
-                        
-                        console.log("controle : " + k + ', ' + l + " est de couleur " + zone[k][l].style.backgroundColor)
-                        
-                        if(zone[k][l].style.backgroundColor == 'black'){
-                            compVieEnv++;
-                        }
-                    }
-                }
-            console.log("compteur de vie :" + compVieEnv )
-            if(compVieEnv >=3){
-                zone[i][j].style.backgroundColor = 'black';  
-            }
-            }
-        }
-    }
-    compTour++
-    console.log("Tour : " + compTour);
-    setTimeout(vie, 1000);
-}
-
 let coordX;
 let coordY;
 
@@ -38,8 +8,65 @@ let compTour = 0;
 let nbCol = 5;
 let nbLign = 5;
 let zone = [];
+let zoneTMoinsUn = [];
 
 
+function vie(){
+    //Effacement du contenu du tableau
+    zoneTMoinsUn = [];
+    // Copie de tableau
+    for(let i=Math.ceil(-nbCol/2-1); i<=Math.floor(nbLign/2+1); i++){
+        zoneTMoinsUn[i]=[];
+        for(let j=Math.ceil(-nbLign/2-1); j<=Math.floor(nbLign/2+1); j++){
+            zoneTMoinsUn[i][j] = zone[i][j].style.backgroundColor;
+        }
+    }
+    
+    console.log(zoneTMoinsUn);
+
+    for(let i=Math.ceil(-nbCol/2); i<=Math.floor(nbLign/2); i++){
+        for(let j=Math.ceil(-nbLign/2); j<=Math.floor(nbLign/2); j++){
+            
+            //console.log(i + ', ' + j);
+            
+            //Donneur de mort, sous condition de presence de moins 2 de forme de vie ou de plus de 3
+            if(zoneTMoinsUn[i][j] == 'black'){
+                compVieEnv = 0;
+                for(let k=i-1; k<=i+1; k++ ){
+                    for(let l=j-1; l<=j+1; l++ ){
+                        console.log('la position ' + k + ', ' + l + ' est ' + zoneTMoinsUn[k][l])
+                        if(zoneTMoinsUn[k][l] == 'black'){
+                            compVieEnv++;
+                        }
+                    }
+                }
+                console.log(compVieEnv + ' vie, pour ' + i + ', ' + j)
+                if(compVieEnv < 3 || compVieEnv > 4){
+                    zone[i][j].style.backgroundColor = 'white';  
+                }
+            }
+            
+            // Donneur de vie, sous condition de presence de 3 formes de vie dans le voisinage proche
+            if(zoneTMoinsUn[i][j] == 'white'){
+                compVieEnv = 0;
+                for(let k=i-1; k<=i+1; k++ ){
+                    for(let l=j-1; l<=j+1; l++ ){
+                        if(zoneTMoinsUn[k][l] == 'black'){
+                            compVieEnv++;
+                        }
+                    }
+                }
+                console.log(compVieEnv + ' vie, pour ' + i + ', ' + j)
+                if(compVieEnv == 3){
+                    zone[i][j].style.backgroundColor = 'black';  
+                }
+            }
+        }
+    }
+    compTour++
+    console.log("Tour : " + compTour);
+    setTimeout(vie, 1000);
+}
 
 let plateau = document.createElement('div');
 document.body.appendChild(plateau);
@@ -68,8 +95,6 @@ for(let i=Math.ceil(-nbCol/2); i<=Math.floor(nbLign/2); i++){
 
     }
     
-
-    
     for(let j=Math.ceil(-nbLign/2); j<=Math.floor(nbLign/2); j++){
         
         if(i<10){
@@ -84,8 +109,6 @@ for(let i=Math.ceil(-nbCol/2); i<=Math.floor(nbLign/2); i++){
             coordX = j;
         }
         
-        
-       
         zone[i][j].addEventListener('click', function(){
             if(zone[i][j].style.backgroundColor == 'white'){
                 zone[i][j].style.backgroundColor = 'black';
@@ -104,12 +127,12 @@ let play = document.createElement('div');
 document.body.appendChild(play);
 play.textContent = "Play";
 play.addEventListener('click', function(){
-    if(play.textContent == "Play"){
-        play.textContent = "Pause";
-        etat = "play";
+    // if(play.textContent == "Play"){
+    //     play.textContent = "Pause";
+    //     etat = "play";
         vie();
-    }else{
-        play.textContent = "Play"
-        etat = "pause";
-    }
+    // }else{
+    //     play.textContent = "Play"
+    //     etat = "pause";
+    // }
 })
