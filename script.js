@@ -6,6 +6,7 @@ let compVieEnv
 let etat;
 let compTour = 0;
 let nbNaiss = 0;
+let nbMort = 0;
 let vitesse = 500;
 let nbCol = 103;
 let nbLign = 30;
@@ -45,6 +46,8 @@ function vie(){
                 console.log(compVieEnv + ' vie, pour ' + i + ', ' + j)
                 if(compVieEnv < 3 || compVieEnv > 4){
                     zone[i][j].style.backgroundColor = 'white';
+                    nbMort++;
+                    mort.textContent = "Death : " + nbMort;
                       
                 }
             }
@@ -81,6 +84,7 @@ function vie(){
 let plateau = document.createElement('div');
 document.body.appendChild(plateau);
 plateau.style.display = 'flex';
+
 plateau.style.flexDirection = 'row';
 plateau.style.flexWrap = 'wrap';
 plateau.style.justifyContent = 'center';
@@ -135,24 +139,24 @@ for(let i=Math.ceil(-nbCol/2); i<=Math.floor(nbLign/2); i++){
 
 let info = document.createElement('div');
 document.body.appendChild(info);
-info.textContent = 'info';
+info.style.backgroundColor = 'pink';
 info.style.display = 'flex';
 info.style.flexDirection = 'row';
+info.style.justifyContent = 'space-around'
 
 let player = document.createElement('div');
-info.appendChild(player);
-player.textContent = 'player';
 document.body.appendChild(player);
+info.appendChild(player);
 
 let stat = document.createElement('div');
-info.appendChild(stat);
-stat.textContent = 'stat'
 document.body.appendChild(stat);
+info.appendChild(stat);
 
 let play = document.createElement('div');
-player.appendChild(play);
+
 document.body.appendChild(play);
 play.textContent = "Play";
+player.appendChild(play);
 play.addEventListener('click', function(){
     if(play.textContent == "Play"){
         play.textContent = "Pause";
@@ -165,27 +169,40 @@ play.addEventListener('click', function(){
 })
 
 let  avanR = document.createElement('div');
-player.appendChild(avanR);
 document.body.appendChild(avanR);
+player.appendChild(avanR);
 avanR.textContent = "Speed X2";
 avanR.addEventListener('click', function(){
     vitesse = vitesse / 2;
 })
 
 let  avanL = document.createElement('div');
-player.appendChild(avanL);
 document.body.appendChild(avanL);
-avanL.textContent = "Speed 1/2";cd 
+player.appendChild(avanL);
+avanL.textContent = "Speed 1/2";
+avanL.addEventListener('click', function(){
+    vitesse = vitesse * 2;
+})
+
+let  reset = document.createElement('div');
+document.body.appendChild(reset);
+player.appendChild(reset);
+reset.textContent = "Reset";
 avanL.addEventListener('click', function(){
     vitesse = vitesse * 2;
 })
 
 let tour = document.createElement('div');
-stat.appendChild(tour);
 document.body.appendChild(tour);
+stat.appendChild(tour);
 tour.textContent = "Turn : " + compTour;
 
 let naiss = document.createElement('div');
-stat.appendChild(naiss);
 document.body.appendChild(naiss);
+stat.appendChild(naiss);
 naiss.textContent = "Birth : " + nbNaiss;
+
+let mort = document.createElement('div');
+document.body.appendChild(mort);
+stat.appendChild(mort);
+mort.textContent = "Death : " + nbMort;
