@@ -175,7 +175,7 @@ avanR.addEventListener('click', function(){
 let  avanL = document.createElement('div');
 player.appendChild(avanL);
 document.body.appendChild(avanL);
-avanL.textContent = "Speed 1/2 ";cd 
+avanL.textContent = "Speed 1/2";cd 
 avanL.addEventListener('click', function(){
     vitesse = vitesse * 2;
 })
